@@ -35,6 +35,8 @@ model Account {
   userId       String
   transactions Transaction[]
   createdAt    DateTime      @default(now())
+  initialBalance Decimal      @default(0)
+
 }
 
 model Category {
@@ -55,4 +57,5 @@ model Transaction {
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  String
   createdAt   DateTime @default(now())
+  @@index([accountId, date])
 }

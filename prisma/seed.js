@@ -20,12 +20,23 @@ const categories = [
 ];
 
 async function main() {
+  let created = 0;
   for (const category of categories) {
-    await prisma.category.create({ data: category });
+    const existing = await prisma.category.findFirst({ where: category });
+    if (!existing) {
+      await prisma.category.create({ data: category });
+      created++;
+    }
   }
-  console.log('Catégories créées');
+  console.log(`Catégories créées : ${created}, déjà présentes : ${categories.length - created}`);
 }
 
 main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
+  .catch((e) => {
+    console.error(e);
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+    await pool.end();
+  });

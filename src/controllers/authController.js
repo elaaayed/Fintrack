@@ -10,6 +10,16 @@ async function register(req, res) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Email invalide' });
+          }
+    if (password.length < 8) {
+      return res.status(400).json({ error: 'Le mot de passe doit contenir au moins 8 caractères' });
+        }
+    if (Number.isNaN(new Date(dateOfBirth).getTime())) {
+      return res.status(400).json({ error: 'Date de naissance invalide' });
+        }
+
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(409).json({ error: 'Cet email est déjà utilisé' });

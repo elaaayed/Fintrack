@@ -51,6 +51,15 @@ CREATE TABLE "Transaction" (
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
 );
 
+-- AlterTable
+ALTER TABLE "Account" ADD COLUMN "initialBalance" DECIMAL(65,30) NOT NULL DEFAULT 0;
+
+-- CreateIndex
+CREATE INDEX "Account_userId_idx" ON "Account"("userId");
+
+-- CreateIndex
+CREATE INDEX "Transaction_accountId_date_idx" ON "Transaction"("accountId", "date");
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
